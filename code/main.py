@@ -2,19 +2,18 @@ import argparse
 import os
 import datetime
 import time
-import random
-import numpy as np 
 import logging
-import sys
 
-os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
-import tensorflow as tf 
+import tensorflow as tf
 from model.framework import FrameWork
 from utils.data_helper import DataSet
 from utils.triplet_classify import run_triplet_classify
 from utils.link_prediction import run_link_prediction
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
 logger = logging.getLogger()
+
 
 def run_training(args):
     # ----------------------------------------------------- #
@@ -77,7 +76,7 @@ def run_training(args):
     logger.info('Train with {} batches'.format(num_batch))
 
     best_performance = 0.
-    for epoch in xrange(args.num_epoch):
+    for epoch in range(args.num_epoch):
         st_epoch = time.time()
         loss_epoch = 0.
         cnt_batch = 0
@@ -146,6 +145,7 @@ def run_training(args):
     logger.info('Restore the model from {}'.format(checkpoint_file))
     saver.restore(sess, checkpoint_file)
     st_test = time.time()
+    epoch = args.num_epoch
     if dataset.task == 'triplet_classify':
         run_triplet_classify(args, sess, model, dataset, epoch, logger, is_test=True)
     else:
@@ -186,6 +186,7 @@ def main():
     args = parser.parse_args()
 
     run_training(args=args)
+
 
 if __name__ == '__main__':
     main()
