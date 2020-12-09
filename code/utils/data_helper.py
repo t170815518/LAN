@@ -4,8 +4,6 @@ import os
 import numpy as np
 import random
 from collections import defaultdict
-import pandas as pd
-import math
 
 
 class DataSet:
@@ -67,21 +65,21 @@ class DataSet:
 
         for entity in graph:
             relation_list = list(set([neighbor[0] for neighbor in graph[entity]]))
-            for n_i in xrange(len(relation_list)):
+            for n_i in range(len(relation_list)):
                 r_i = relation_list[n_i]
                 freq_relation[r_i] += 1
-                for n_j in xrange(n_i+1, len(relation_list)): 
+                for n_j in range(n_i+1, len(relation_list)): 
                     r_j = relation_list[n_j]
                     co_relation[r_i][r_j] += 1
                     co_relation[r_j][r_i] += 1
 
-        for r_i in xrange(cnt_relation*2):
+        for r_i in range(cnt_relation*2):
             co_relation[r_i] = (co_relation[r_i] * 1.0) / freq_relation[r_i]
             # co_relation[r_i][r_i] = 1.0
         self.co_relation = co_relation.transpose()
-        for r_i in xrange(cnt_relation*2):
+        for r_i in range(cnt_relation*2):
             co_relation[r_i][r_i] = co_relation[r_i].mean()
-        print 'finish calculating co relation'
+        print('finish calculating co relation')
 
     def doc_to_tensor_graph(self, data_path_train, data_path_aux):
         triplet_train = []
@@ -163,7 +161,7 @@ class DataSet:
                 for _idx, neighbor in enumerate(graph[entity]):
                     if neighbor[0] == rel_i:
                         graph[entity][_idx][2] = j_imply_i 
-        print 'finish processing graph'
+        print('finish processing graph')
         return graph 
 
     def doc_to_tensor(self, data_path):
@@ -245,7 +243,7 @@ class DataSet:
             num_neighbor = len(graph[entity])
             cnt += num_neighbor
             num_sample = min(num_neighbor, self.max_neighbor)
-            # sample_id = random.sample(xrange(len(graph[entity])), num_sample)
+            # sample_id = random.sample(range(len(graph[entity])), num_sample)
             sample_id = range(len(graph[entity]))[:num_sample]
             # sample_graph[entity][:num_sample] = np.asarray(graph[entity])[sample_id]
             sample_graph[entity][:num_sample] = np.asarray(graph[entity])[sample_id][:, 0:2]
@@ -290,18 +288,18 @@ class DataSet:
                     id_tail_corrupted = triplet[2]
                     id_relation = triplet[1]
 
-                    for n_neg in xrange(num_negative):
+                    for n_neg in range(num_negative):
                         if self.corrupt_mode == 'both':
                             head_prob = np.random.binomial(1, 0.5)
                             if head_prob:
-                                id_head_corrupted = random.sample(xrange(self.num_training_entity), 1)[0] 
+                                id_head_corrupted = random.sample(range(self.num_training_entity), 1)[0] 
                             else:
-                                id_tail_corrupted = random.sample(xrange(self.num_training_entity), 1)[0] 
+                                id_tail_corrupted = random.sample(range(self.num_training_entity), 1)[0] 
                         else:
                             if 'tail' in self.predict_mode:
-                                id_head_corrupted = random.sample(xrange(self.num_training_entity), 1)[0] 
+                                id_head_corrupted = random.sample(range(self.num_training_entity), 1)[0] 
                             elif 'head' in self.predict_mode:
-                                id_tail_corrupted = random.sample(xrange(self.num_training_entity), 1)[0] 
+                                id_tail_corrupted = random.sample(range(self.num_training_entity), 1)[0] 
                         batch_negative.append([id_head_corrupted, triplet[1], id_tail_corrupted])
 
                 batch_negative = np.asarray(batch_negative)
@@ -332,7 +330,7 @@ class DataSet:
         # # construct two batches for head and tail prediction
         batch_predict_head = [triplet_evaluate]
         # replacing head
-        id_heads_corrupted_list = xrange(self.num_training_entity)
+        id_heads_corrupted_list = range(self.num_training_entity)
         id_heads_corrupted_set = set(id_heads_corrupted_list)
         id_heads_corrupted_set.discard(triplet_evaluate[0])  # remove the golden head
         for head in id_heads_corrupted_list:
@@ -342,8 +340,8 @@ class DataSet:
 
         batch_predict_tail = [triplet_evaluate]
         # replacing tail
-        # id_tails_corrupted = set(random.sample(xrange(self.num_entity), 1000))
-        id_tails_corrupted_list = xrange(self.num_training_entity)
+        # id_tails_corrupted = set(random.sample(range(self.num_entity), 1000))
+        id_tails_corrupted_list = range(self.num_training_entity)
         id_tails_corrupted_set = set(id_tails_corrupted_list)
         id_tails_corrupted_set.discard(triplet_evaluate[2])  # remove the golden tail
         for tail in id_tails_corrupted_list:

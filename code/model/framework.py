@@ -113,16 +113,16 @@ class FrameWork(object):
         # get head, tail, relation embedded
         encoder = None
         if self.aggregate_type == 'gnn_mean':
-            from aggregator import GNN_MEAN as Encoder 
+            from model.aggregator import GNN_MEAN as Encoder
             encoder = Encoder(self.num_relation, self.embedding_dim)
         elif self.aggregate_type == 'lstm':
-            from aggregator import LSTM as Encoder
+            from model.aggregator import LSTM as Encoder
             encoder = Encoder(self.num_relation, self.embedding_dim)
         elif self.aggregate_type == 'attention':
-            from aggregator import ATTENTION as Encoder
+            from model.aggregator import ATTENTION as Encoder
             encoder = Encoder(self.num_relation, self.num_entity, self.embedding_dim)
         else:
-            print 'Not emplemented yet!'
+            print('Not emplemented yet!')
         assert encoder != None
 
         # aggregate on neighbors input
@@ -135,19 +135,19 @@ class FrameWork(object):
         # get score
         decoder = None
         if self.score_function == 'TransE':
-            from score_function import TransE as Decoder 
+            from model.score_function import TransE as Decoder
             decoder = Decoder()
         elif self.score_function == 'Distmult':
-            from score_function import Distmult as Decoder
+            from model.score_function import Distmult as Decoder
             decoder = Decoder()
         elif self.score_function == 'Complex':
-            from score_function import Complex as Decoder
+            from model.score_function import Complex as Decoder
             decoder = Decoder(self.embedding_dim)
         elif self.score_function == 'Analogy':
-            from score_function import Analogy as Decoder
+            from model.score_function import Analogy as Decoder
             decoder = Decoder(self.embedding_dim)
         else:
-            print 'Not emplemented yet!'
+            print('Not emplemented yet!')
         assert decoder != None
 
         emb_relation_pos_out = tf.nn.embedding_lookup(self.relation_embedding_out, self.input_relation_ph)
@@ -187,7 +187,7 @@ class FrameWork(object):
                         logits=origin_negative_score))
             loss += self.weight_decay * encoder.l2_regularization
         else:
-            print 'Not such loss!'
+            print('Not such loss!')
         assert loss != None
 
         self.loss = loss
