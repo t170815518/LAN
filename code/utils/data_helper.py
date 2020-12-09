@@ -88,7 +88,7 @@ class DataSet:
         train_entity = {}
         cnt_entity = 0
         cnt_relation = 0
-        with open(data_path_train, 'rb') as fr:
+        with open(data_path_train, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 line = [int(_id) for _id in line]
@@ -108,7 +108,7 @@ class DataSet:
 
         self.num_training_entity = cnt_entity
 
-        with open(data_path_aux, 'rb') as fr:
+        with open(data_path_aux, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 line = [int(_id) for _id in line]
@@ -166,7 +166,7 @@ class DataSet:
 
     def doc_to_tensor(self, data_path):
         triplet_tensor = []
-        with open(data_path, 'rb') as fr:
+        with open(data_path, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 line = [int(_id) for _id in line]
@@ -186,7 +186,7 @@ class DataSet:
 
     def build_relation_dict(self, data_path, pad, cnt):
         i2n = {}
-        with open(data_path, 'rb') as fr:
+        with open(data_path, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 # name = '/'.join(line[0].split('/')[-2:])
@@ -201,7 +201,7 @@ class DataSet:
 
     def build_entity_dict(self, data_path):
         i2n = {}
-        with open(data_path, 'rb') as fr:
+        with open(data_path, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 # name = '/'.join(line[0].split('/')[-2:])
@@ -215,13 +215,13 @@ class DataSet:
 
     def build_entity_dict2(self, index_path, name_path, cnt):
         m2i = {}
-        with open(index_path, 'rb') as fr:
+        with open(index_path, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 m2i[line[0]] = int(line[1])
 
         i2n = {}
-        with open(name_path, 'rb') as fr:
+        with open(name_path, 'r') as fr:
             for line in fr:
                 line = line.strip().split('\t')
                 try:
